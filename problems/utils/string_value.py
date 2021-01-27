@@ -54,11 +54,35 @@ def SA(_str, n):
     
     return sa
 
+
+def LCP(_str, sa):
+    maxi = len(_str)
+    n = len(sa)
+    lcp = [0]*n
+    inv_sa = [0]*n
+    for x in range(n):
+        inv_sa[ sa[x] ] = x
+    k = 0
+    
+    for x in range(n):
+        if inv_sa[x] == n-1:
+            k = 0
+            continue
+        y = sa[inv_sa[x]+1]
+        
+        while( x+k < n and y+k < n and _str[x+k]==_str[y+k] ):
+            k += 1
+        lcp[inv_sa[x]] = k
+        maxi = max(lcp[inv_sa[x]]*2,maxi)
+        k = k-1 if k>0 else k
+    return (lcp, maxi)
+
 def printArray(_array):
     for x in _array:
         print(x)
 
 def solve_string(_str):
     sufixxArray = SA(_str, len(_str))
-    print(sufixxArray)
-    return 'lala'
+    lcp, maxi = LCP(_str, sufixxArray)
+    print(maxi)
+    return maxi
